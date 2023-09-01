@@ -100,7 +100,8 @@ pip install -r requirements.txt
 
 ## 🎯 Getting Started of Developing with BasicTS
 
-### Preparing Data
+<details>
+  <summary><b>Preparing Data</b></summary>
 
 - **Clone BasicTS**
 
@@ -129,7 +130,10 @@ pip install -r requirements.txt
     bash scripts/data_preparation/all.sh
     ```
 
-### 3 Steps to Evaluate Your Model
+</details>
+
+<details>
+  <summary><b>3 Steps to Evaluate Your Model</b></summary>
 
 - **Define Your Model Architecture**
 
@@ -149,7 +153,10 @@ pip install -r requirements.txt
     The configuration file is a `.py` file, in which you can import your model and runner and set all the options. BasicTS uses `EasyDict` to serve as a parameter container, which is extensible and flexible to use.
     An example of the configuration file for the `MLP` model on the `METR-LA` dataset can be found in [examples/MLP/MLP_METR-LA.py](examples/MLP/MLP_METR-LA.py)
 
-### Run It!
+</details>
+
+<details>
+  <summary><b>Run It!</b></summary>
 
 An example of a start script can be found in [examples/run.py](examples/run.py).
 You can run your model by the following command:
@@ -158,10 +165,12 @@ You can run your model by the following command:
 python examples/run.py -c /path/to/your/config/file.py --gpus '0'
 ```
 
+</details>
 
 ## 📌 Examples
 
-### Reproducing Built-in Models
+<details>
+  <summary><b>Reproducing Built-in Models</b></summary>
 
 BasicTS provides a wealth of built-in models. You can find all the built-in models and their corresponding runners in [`basicts/archs/arch_zoo`](basicts/archs/arch_zoo/) and [`basicts/runners/runner_zoo`](basicts/runners/runner_zoo/), respectively. You can reproduce these models by running the following command:
 
@@ -175,9 +184,14 @@ Replace `${DATASET_NAME}` and `${MODEL_NAME}` with any supported models and data
 python examples/run.py -c examples/GWNet/GWNet_METR-LA.py --gpus '0'
 ```
 
-### Customized Your Own Model
+</details>
+
+<details>
+  <summary><b>Customized Your Own Model</b></summary>
 
 - [Multi-Layer Perceptron (MLP)](examples/MLP)
+
+</details>
 
 ## 📉 Main Results
 
@@ -188,9 +202,9 @@ python examples/run.py -c examples/GWNet/GWNet_METR-LA.py --gpus '0'
 
 </details>
 
-## 🔗 Acknowledgement and 📜 References
+## 🔗 Acknowledgement and References
 
-Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS)[2] and [EasyTorch](https://github.com/cnstark/easytorch)[1], that are easy-to-use and powerful open-source neural network training frameworks.
+Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS)[2] and [EasyTorch](https://github.com/cnstark/easytorch)[1], two easy-to-use and powerful open-source neural network training frameworks.
 
 - [1] Yuhao Wang. EasyTorch. <https://github.com/cnstark/easytorch>, 2020.
 - [2] Shao Zezhi. BasicTS. <https://github.com/zezhishao/BasicTS>, 2022
