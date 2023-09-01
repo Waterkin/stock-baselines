@@ -1,9 +1,9 @@
 import torch
 
-from ..base_tsf_runner import BaseTimeSeriesForecastingRunner
+from ..base_spp_runner import BaseStockPricePredictionRunner
 
 
-class SimpleTimeSeriesForecastingRunner(BaseTimeSeriesForecastingRunner):
+class SimpleStockPricePredictionRunner(BaseStockPricePredictionRunner):
     """Simple Runner: select forward features and target features. This runner can cover most cases."""
 
     def __init__(self, cfg: dict):
@@ -64,10 +64,11 @@ class SimpleTimeSeriesForecastingRunner(BaseTimeSeriesForecastingRunner):
             future_data_4_dec = self.select_input_features(future_data)
         else:
             future_data_4_dec = self.select_input_features(future_data)
-            # only use the temporal features
+            # only use the temporal features 
             future_data_4_dec[..., 0] = torch.empty_like(future_data_4_dec[..., 0])
 
         # curriculum learning
+        # TODO: 这里是数据前向传播的过程，需要看看model函数是怎么写的，怎么读的数据。
         prediction_data = self.model(history_data=history_data, future_data=future_data_4_dec, batch_seen=iter_num, epoch=epoch, train=train)
         # feed forward
         assert list(prediction_data.shape)[:3] == [batch_size, length, num_nodes], \
@@ -76,8 +77,5 @@ class SimpleTimeSeriesForecastingRunner(BaseTimeSeriesForecastingRunner):
         prediction = self.select_target_features(prediction_data)
         real_value = self.select_target_features(future_data)
         return prediction, real_value
-
-
-    
     
     

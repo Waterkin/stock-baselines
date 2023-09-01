@@ -3,9 +3,9 @@ import os
 from easytorch.utils.registry import scan_modules
 
 from .registry import SCALER_REGISTRY
-from .dataset import TimeSeriesForecastingDataset
+from .dataset import TimeSeriesForecastingDataset, StockPricePredictionDataset
 
-__all__ = ["SCALER_REGISTRY", "TimeSeriesForecastingDataset"]
+__all__ = ["SCALER_REGISTRY", "TimeSeriesForecastingDataset", "StockPricePredictionDataset"]
 
 # fix bugs on Windows systems and on jupyter
 project_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

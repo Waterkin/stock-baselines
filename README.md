@@ -175,8 +175,6 @@ python examples/run.py -c examples/GWNet/GWNet_METR-LA.py --gpus '0'
 
 ## ✨ Highlighted Features
 
-Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS)[2] and [EasyTorch](https://github.com/cnstark/easytorch)[1].
-
 <details>
   <summary><b>😼 Fair Performance Review</b></summary>
 
