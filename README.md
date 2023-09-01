@@ -2,7 +2,7 @@
   <img src="assets/basicts_logo.png" height=200>
   <!-- <h1><b> BasicTS </b></h1> -->
   <!-- <h2><b> BasicTS </b></h2> -->
-  <h3><b> A Standard and Fair Time Series Forecasting Benchmark and Toolkit. </b></h3>
+  <h3><b> A Standard and Fair Stock Price Prediction Benchmark and Toolkit. </b></h3>
 </div>
 
 ---
@@ -16,24 +16,29 @@
 
 </div>
 
-BasicTS (**Basic** **T**ime **S**eries) is a PyTorch-based benchmark and toolbox for **time series forecasting** (TSF).
+Stock Baselines is a PyTorch-based benchmark and toolbox for **Stock Price Prediction**.
 
-On the one hand, BasicTS utilizes a ***unified and standard pipeline*** to give a ***fair and exhaustive*** reproduction and comparison of popular deep learning-based models. 
+On the one hand, Stock Baselines utilizes a ***unified and standard pipeline*** to give a ***fair and exhaustive*** reproduction and comparison of popular deep learning-based models. 
 
-On the other hand, BasicTS provides users with ***easy-to-use and extensible interfaces*** to facilitate the quick design and evaluation of new models. At a minimum, users only need to define the model architecture.
+On the other hand, Stock Baselines provides users with ***easy-to-use and extensible interfaces*** to facilitate the quick design and evaluation of new models. At a minimum, users only need to define the model architecture.
 
 ## ✨ Highlighted Features
 
-BasicTS is developed based on [EasyTorch](https://github.com/cnstark/easytorch)[1], an easy-to-use and powerful open-source neural network training framework.
+Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS) and [EasyTorch](https://github.com/cnstark/easytorch)[1].
+
+<details>
+  <summary>点击以展开</summary>
+  
+  这里是隐藏的内容。
+  
+</details>
+
 
 ### 😼 Fair Performance Review
 
 - 🛡**Rich Datasets**. BasicTS supports 14 datasets, *e.g.*, METR-LA, PeMS-Bay, PeMS04, ETT, Electricity, Exchange Rate, and Weather. More datasets will be added in the future.
 
 - ⚔️**Rich Baselines**. BasicTS has a wealth of built-in spatial-temporal forecasting models (*e.g.*, Spatial-Temporal GNNs) and long time-series forecasting models (*e.g.*, Transformer-based models). 
-
-Users can compare the performance of these models on arbitrary datasets fairly and exhaustively.
-
 ### 👨‍💻 Developing with BasicTS
 
 - 💻**Minimum Code**. Users only need to implement key codes such as model architecture and data pre/post-processing to build their own deep learning projects.
@@ -60,7 +65,7 @@ Users can compare the performance of these models on arbitrary datasets fairly a
 
 ### OS
 
-We recommend using BasicTS on Linux systems (*e.g.* Ubuntu and CentOS). 
+We recommend using stock-baselines on Linux systems (*e.g.* Ubuntu and CentOS). 
 Other systems (*e.g.*, Windows and macOS) have not been tested.
 
 ### Python
@@ -97,7 +102,7 @@ BasicTS is built on PyTorch 1.9.1 or 1.10.0, while other versions have not been 
 
     ```bash
     cd /path/to/your/project
-    git clone https://github.com/zezhishao/BasicTS.git
+    git clone https://github.com/Waterkin/stock-baselines.git
     ```
 
 - **Download Raw Data**
