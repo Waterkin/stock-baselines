@@ -117,3 +117,42 @@ def masked_mape(preds: torch.Tensor, labels: torch.Tensor, null_val: float = 0.0
     loss = loss * mask
     loss = torch.where(torch.isnan(loss), torch.zeros_like(loss), loss)
     return torch.mean(loss)
+
+
+def masked_binary_cross_entropy(preds: torch.Tensor, labels: torch.Tensor, null_val: float = np.nan) -> torch.Tensor:
+    """Masked Binary Cross Entropy Loss.
+
+    Args:
+        preds (torch.Tensor): predicted probabilities, should be between 0 and 1
+        labels (torch.Tensor): binary ground truth labels (0 or 1)
+        null_val (float, optional): null value to ignore. Defaults to np.nan.
+
+    Returns:
+        torch.Tensor: masked binary cross entropy loss
+    """
+
+    # Generate mask
+    if np.isnan(null_val):
+        mask = ~torch.isnan(labels)
+    else:
+        eps = 5e-5
+        mask = ~torch.isclose(labels, torch.tensor(null_val).expand_as(labels).to(labels.device), atol=eps, rtol=0.)
+
+    # Convert mask to float and normalize
+    mask = mask.float()
+    mask /= torch.mean(mask)
+
+    # Replace NaNs in mask
+    mask = torch.where(torch.isnan(mask), torch.zeros_like(mask), mask)
+
+    # Compute binary cross entropy
+    bce_loss = F.binary_cross_entropy(preds, labels, reduction='none')
+
+    # Apply mask
+    masked_bce_loss = bce_loss * mask
+
+    # Replace NaNs in loss
+    masked_bce_loss = torch.where(torch.isnan(masked_bce_loss), torch.zeros_like(masked_bce_loss), masked_bce_loss)
+
+    return torch.mean(masked_bce_loss)
+

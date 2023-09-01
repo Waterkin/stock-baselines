@@ -75,7 +75,7 @@ pip install -r requirements.txt
 ## 🎯 Get Started
 
 <details>
-  <summary><b>Preparing Data</b></summary>
+  <summary><b>Prepare Data</b></summary>
 
 - **Clone Stock Baselines**
 
@@ -107,7 +107,7 @@ pip install -r requirements.txt
 </details>
 
 <details>
-  <summary><b>Run It!</b></summary>
+  <summary><b>Run Baselines</b></summary>
 
 An example of a start script can be found in [examples/run.py](examples/run.py).
 You can run your model by the following command:
@@ -121,7 +121,7 @@ python examples/run.py -c /path/to/your/config/file.py --gpus '0'
 ## 📌 Usage
 
 <details>
-  <summary><b>Reproducing Built-in Models</b></summary>
+  <summary><b>Reproduce Built-in Models</b></summary>
 
 BasicTS provides a wealth of built-in models. You can find all the built-in models and their corresponding runners in [`basicts/archs/arch_zoo`](basicts/archs/arch_zoo/) and [`basicts/runners/runner_zoo`](basicts/runners/runner_zoo/), respectively. You can reproduce these models by running the following command:
 
