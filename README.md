@@ -24,12 +24,10 @@ On the other hand, Stock Baselines provides users with ***easy-to-use and extens
 
 ## ✨ Highlighted Features
 
-Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS) and [EasyTorch](https://github.com/cnstark/easytorch)[1].
+Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS)[2] and [EasyTorch](https://github.com/cnstark/easytorch)[1].
 
 <details>
   <summary><b>😼 Fair Performance Review</b></summary>
-  
-  ### 😼 Fair Performance Review
 
   - 🛡**Rich Datasets**. BasicTS supports 14 datasets, *e.g.*, METR-LA, PeMS-Bay, PeMS04, ETT, Electricity, Exchange Rate, and Weather. More datasets will be added in the future.
 
@@ -37,15 +35,18 @@ Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/Bas
   
 </details>
 
-### 👨‍💻 Developing with BasicTS
+<details>
+  <summary><b>👨‍💻 Developing with Stock Baselines</b></summary>
 
-- 💻**Minimum Code**. Users only need to implement key codes such as model architecture and data pre/post-processing to build their own deep learning projects.
+  - 💻**Minimum Code**. Users only need to implement key codes such as model architecture and data pre/post-processing to build their own deep learning projects.
 
-- 🔧**Everything Based on Config**. Users can control all the details of the pipeline through a config file, such as the hyperparameter of dataloaders, optimization, and other tricks (*e.g.*, curriculum learning). 
+  - 🔧**Everything Based on Config**. Users can control all the details of the pipeline through a config file, such as the hyperparameter of dataloaders, optimization, and other tricks (*e.g.*, curriculum learning). 
 
-- 🔦**Support All Devices**. BasicTS supports CPU, GPU and GPU distributed training (both single node multiple GPUs and multiple nodes) thanks to using EasyTorch as the backend. Users can use it by setting parameters without modifying any code.
+  - 🔦**Support All Devices**. BasicTS supports CPU, GPU and GPU distributed training (both single node multiple GPUs and multiple nodes) thanks to using EasyTorch as the backend. Users can use it by setting parameters without modifying any code.
 
-- 📃**Save Training Log**. Support `logging` log system and `Tensorboard`, and encapsulate it as a unified interface, users can save customized training logs by calling simple interfaces.
+  - 📃**Save Training Log**. Support `logging` log system and `Tensorboard`, and encapsulate it as a unified interface, users can save customized training logs by calling simple interfaces.
+
+</details>
 
 ## ✨ Built-in Datasets and Baselines
 
@@ -61,6 +62,9 @@ Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/Bas
 
 ## 💿 Dependencies
 
+<details>
+  <summary><b>Introduction</b></summary>
+
 ### OS
 
 We recommend using stock-baselines on Linux systems (*e.g.* Ubuntu and CentOS). 
@@ -75,6 +79,13 @@ Python >= 3.6 (recommended >= 3.9).
 ### Other Dependencies
 
 BasicTS is built based on PyTorch and [EasyTorch](https://github.com/cnstark/easytorch).
+
+### Warning
+
+BasicTS is built on PyTorch 1.9.1 or 1.10.0, while other versions have not been tested.
+
+</details>
+
 You can install PyTorch following the instruction in [PyTorch](https://pytorch.org/get-started/locally/). For example:
 
 ```bash
@@ -86,11 +97,6 @@ After ensuring that PyTorch is installed correctly, you can install other depend
 ```bash
 pip install -r requirements.txt
 ```
-
-### Warning
-
-BasicTS is built on PyTorch 1.9.1 or 1.10.0, while other versions have not been tested.
-
 
 ## 🎯 Getting Started of Developing with BasicTS
 
@@ -172,23 +178,19 @@ python examples/run.py -c examples/GWNet/GWNet_METR-LA.py --gpus '0'
 ### Customized Your Own Model
 
 - [Multi-Layer Perceptron (MLP)](examples/MLP)
-- More...
-
 
 ## 📉 Main Results
 
-### Spatial-Temporal Forecasting
+<details>
+  <summary><b>Spatial-Temporal Forecasting</b></summary>
 
 ![Main results.](results/results.png)
 
-### Long Time- Series Forecasting (⌛️ TBD)
+</details>
 
+## 🔗 Acknowledgement and 📜 References
 
-## 🔗 Acknowledgement
-
-BasicTS is developed based on [EasyTorch](https://github.com/cnstark/easytorch)[1], an easy-to-use and powerful open-source neural network training framework.
-
-
-## 📜 References
+Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS)[2] and [EasyTorch](https://github.com/cnstark/easytorch)[1], that are easy-to-use and powerful open-source neural network training frameworks.
 
 - [1] Yuhao Wang. EasyTorch. <https://github.com/cnstark/easytorch>, 2020.
+- [2] Shao Zezhi. BasicTS. <https://github.com/zezhishao/BasicTS>, 2022
