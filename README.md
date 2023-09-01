@@ -22,32 +22,6 @@ On the one hand, Stock Baselines utilizes a ***unified and standard pipeline*** 
 
 On the other hand, Stock Baselines provides users with ***easy-to-use and extensible interfaces*** to facilitate the quick design and evaluation of new models. At a minimum, users only need to define the model architecture.
 
-## ✨ Highlighted Features
-
-Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS)[2] and [EasyTorch](https://github.com/cnstark/easytorch)[1].
-
-<details>
-  <summary><b>😼 Fair Performance Review</b></summary>
-
-  - 🛡**Rich Datasets**. BasicTS supports 14 datasets, *e.g.*, METR-LA, PeMS-Bay, PeMS04, ETT, Electricity, Exchange Rate, and Weather. More datasets will be added in the future.
-
-  - ⚔️**Rich Baselines**. BasicTS has a wealth of built-in spatial-temporal forecasting models (*e.g.*, Spatial-Temporal GNNs) and long time-series forecasting models (*e.g.*, Transformer-based models). 
-  
-</details>
-
-<details>
-  <summary><b>👨‍💻 Developing with Stock Baselines</b></summary>
-
-  - 💻**Minimum Code**. Users only need to implement key codes such as model architecture and data pre/post-processing to build their own deep learning projects.
-
-  - 🔧**Everything Based on Config**. Users can control all the details of the pipeline through a config file, such as the hyperparameter of dataloaders, optimization, and other tricks (*e.g.*, curriculum learning). 
-
-  - 🔦**Support All Devices**. BasicTS supports CPU, GPU and GPU distributed training (both single node multiple GPUs and multiple nodes) thanks to using EasyTorch as the backend. Users can use it by setting parameters without modifying any code.
-
-  - 📃**Save Training Log**. Support `logging` log system and `Tensorboard`, and encapsulate it as a unified interface, users can save customized training logs by calling simple interfaces.
-
-</details>
-
 ## ✨ Built-in Datasets and Baselines
 
 ### 🛡 Datasets
@@ -60,7 +34,7 @@ Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/Bas
 - DCRNN, Graph WaveNet, MTGNN, STID, D2STGNN, STEP, DGCRN, DGCRN, STNorm, AGCRN, GTS, StemGNN, MegaCRN, STGCN
 - Informer, Autoformer, FEDformer, Pyraformer, DLinear, NLinear, Triformer, Crossformer
 
-## 💿 Dependencies
+## 💿 Install
 
 <details>
   <summary><b>Introduction</b></summary>
@@ -98,12 +72,12 @@ After ensuring that PyTorch is installed correctly, you can install other depend
 pip install -r requirements.txt
 ```
 
-## 🎯 Getting Started of Developing with BasicTS
+## 🎯 Get Started
 
 <details>
   <summary><b>Preparing Data</b></summary>
 
-- **Clone BasicTS**
+- **Clone Stock Baselines**
 
     ```bash
     cd /path/to/your/project
@@ -133,7 +107,40 @@ pip install -r requirements.txt
 </details>
 
 <details>
-  <summary><b>3 Steps to Evaluate Your Model</b></summary>
+  <summary><b>Run It!</b></summary>
+
+An example of a start script can be found in [examples/run.py](examples/run.py).
+You can run your model by the following command:
+
+```bash
+python examples/run.py -c /path/to/your/config/file.py --gpus '0'
+```
+
+</details>
+
+## 📌 Usage
+
+<details>
+  <summary><b>Reproducing Built-in Models</b></summary>
+
+BasicTS provides a wealth of built-in models. You can find all the built-in models and their corresponding runners in [`basicts/archs/arch_zoo`](basicts/archs/arch_zoo/) and [`basicts/runners/runner_zoo`](basicts/runners/runner_zoo/), respectively. You can reproduce these models by running the following command:
+
+```bash
+python examples/run.py -c examples/${MODEL_NAME}/${MODEL_NAME}_${DATASET_NAME}.py --gpus '0'
+```
+
+For example, you can run Graph WaveNet on METR-LA dataset by:
+
+```bash
+python examples/run.py -c examples/GWNet/GWNet_METR-LA.py --gpus '0'
+```
+
+</details>
+
+<details>
+  <summary><b>Customized Your Own Model</b></summary>
+
+[Multi-Layer Perceptron (MLP)](examples/MLP)
 
 - **Define Your Model Architecture**
 
@@ -153,47 +160,10 @@ pip install -r requirements.txt
     The configuration file is a `.py` file, in which you can import your model and runner and set all the options. BasicTS uses `EasyDict` to serve as a parameter container, which is extensible and flexible to use.
     An example of the configuration file for the `MLP` model on the `METR-LA` dataset can be found in [examples/MLP/MLP_METR-LA.py](examples/MLP/MLP_METR-LA.py)
 
-</details>
-
-<details>
-  <summary><b>Run It!</b></summary>
-
-An example of a start script can be found in [examples/run.py](examples/run.py).
-You can run your model by the following command:
-
-```bash
-python examples/run.py -c /path/to/your/config/file.py --gpus '0'
-```
 
 </details>
 
-## 📌 Examples
-
-<details>
-  <summary><b>Reproducing Built-in Models</b></summary>
-
-BasicTS provides a wealth of built-in models. You can find all the built-in models and their corresponding runners in [`basicts/archs/arch_zoo`](basicts/archs/arch_zoo/) and [`basicts/runners/runner_zoo`](basicts/runners/runner_zoo/), respectively. You can reproduce these models by running the following command:
-
-```bash
-python examples/run.py -c examples/${MODEL_NAME}/${MODEL_NAME}_${DATASET_NAME}.py --gpus '0'
-```
-
-Replace `${DATASET_NAME}` and `${MODEL_NAME}` with any supported models and datasets. For example, you can run Graph WaveNet on METR-LA dataset by:
-
-```bash
-python examples/run.py -c examples/GWNet/GWNet_METR-LA.py --gpus '0'
-```
-
-</details>
-
-<details>
-  <summary><b>Customized Your Own Model</b></summary>
-
-- [Multi-Layer Perceptron (MLP)](examples/MLP)
-
-</details>
-
-## 📉 Main Results
+## 📉 Results
 
 <details>
   <summary><b>Spatial-Temporal Forecasting</b></summary>
@@ -201,6 +171,35 @@ python examples/run.py -c examples/GWNet/GWNet_METR-LA.py --gpus '0'
 ![Main results.](results/results.png)
 
 </details>
+
+
+## ✨ Highlighted Features
+
+Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS)[2] and [EasyTorch](https://github.com/cnstark/easytorch)[1].
+
+<details>
+  <summary><b>😼 Fair Performance Review</b></summary>
+
+  - 🛡**Rich Datasets**. BasicTS supports 14 datasets, *e.g.*, METR-LA, PeMS-Bay, PeMS04, ETT, Electricity, Exchange Rate, and Weather. More datasets will be added in the future.
+
+  - ⚔️**Rich Baselines**. BasicTS has a wealth of built-in spatial-temporal forecasting models (*e.g.*, Spatial-Temporal GNNs) and long time-series forecasting models (*e.g.*, Transformer-based models). 
+  
+</details>
+
+<details>
+  <summary><b>👨‍💻 Developing with Stock Baselines</b></summary>
+
+  - 💻**Minimum Code**. Users only need to implement key codes such as model architecture and data pre/post-processing to build their own deep learning projects.
+
+  - 🔧**Everything Based on Config**. Users can control all the details of the pipeline through a config file, such as the hyperparameter of dataloaders, optimization, and other tricks (*e.g.*, curriculum learning). 
+
+  - 🔦**Support All Devices**. BasicTS supports CPU, GPU and GPU distributed training (both single node multiple GPUs and multiple nodes) thanks to using EasyTorch as the backend. Users can use it by setting parameters without modifying any code.
+
+  - 📃**Save Training Log**. Support `logging` log system and `Tensorboard`, and encapsulate it as a unified interface, users can save customized training logs by calling simple interfaces.
+
+</details>
+
+
 
 ## 🔗 Acknowledgement and References
 
