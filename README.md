@@ -29,16 +29,14 @@ Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/Bas
 <details>
   <summary>点击以展开</summary>
   
-  这里是隐藏的内容。
+  ### 😼 Fair Performance Review
+
+  - 🛡**Rich Datasets**. BasicTS supports 14 datasets, *e.g.*, METR-LA, PeMS-Bay, PeMS04, ETT, Electricity, Exchange Rate, and Weather. More datasets will be added in the future.
+
+  - ⚔️**Rich Baselines**. BasicTS has a wealth of built-in spatial-temporal forecasting models (*e.g.*, Spatial-Temporal GNNs) and long time-series forecasting models (*e.g.*, Transformer-based models). 
   
 </details>
 
-
-### 😼 Fair Performance Review
-
-- 🛡**Rich Datasets**. BasicTS supports 14 datasets, *e.g.*, METR-LA, PeMS-Bay, PeMS04, ETT, Electricity, Exchange Rate, and Weather. More datasets will be added in the future.
-
-- ⚔️**Rich Baselines**. BasicTS has a wealth of built-in spatial-temporal forecasting models (*e.g.*, Spatial-Temporal GNNs) and long time-series forecasting models (*e.g.*, Transformer-based models). 
 ### 👨‍💻 Developing with BasicTS
 
 - 💻**Minimum Code**. Users only need to implement key codes such as model architecture and data pre/post-processing to build their own deep learning projects.
