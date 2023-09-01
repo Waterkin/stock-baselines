@@ -27,7 +27,7 @@ On the other hand, Stock Baselines provides users with ***easy-to-use and extens
 Stock Baselines is developed based on [BasicTS](https://github.com/zezhishao/BasicTS) and [EasyTorch](https://github.com/cnstark/easytorch)[1].
 
 <details>
-  <summary>点击以展开</summary>
+  <summary><b>😼 Fair Performance Review</b></summary>
   
   ### 😼 Fair Performance Review
 
