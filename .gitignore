@@ -7,8 +7,11 @@ todo.md
 gpu_task.py
 cmd.sh
 
-basicts/archs/stid_arch/
+basicts/archs/arch_zoo/stid_arch/
 examples/T-SIDE/
+scripts/data_preparation/STOCK-IND/
+tests/test_data.ipynb
+datasets/STOCK-IND
 
 # file
 *.npz
