@@ -1,14 +1,14 @@
 import os
 import sys
-
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 # TODO: remove it when basicts can be installed by pip
 sys.path.append(os.path.abspath(__file__ + "/../../.."))
 from easydict import EasyDict
-from basicts.losses import masked_binary_cross_entropy
+from basicts.losses import masked_bce
 # TODO: 修改TimeSeriesForecastingDataset和SimpleTimeSeriesForecastingRunner
 from basicts.data import StockPricePredictionDataset
 from basicts.runners import SimpleStockPricePredictionRunner
-from basicts.archs import STID
+from basicts.archs import STID_S
 
 
 CFG = EasyDict()
@@ -18,11 +18,12 @@ CFG.DESCRIPTION = "T-SIDE model configuration"
 CFG.RUNNER = SimpleStockPricePredictionRunner
 CFG.DATASET_CLS = StockPricePredictionDataset
 CFG.DATASET_NAME = "STOCK-IND"
-CFG.DATASET_TYPE = "Traffic flow"
-CFG.DATASET_INPUT_LEN = 12
-CFG.DATASET_OUTPUT_LEN = 12
+CFG.DATASET_TYPE = "Stock Industry Data"
+CFG.DATASET_INPUT_LEN = 5 # 时间窗口
+CFG.DATASET_OUTPUT_LEN = 5 # 时间窗口
 CFG.GPU_NUM = 1
 CFG.NULL_VAL = 0.0
+CFG.RESCALE = False
 
 # ================= environment ================= #
 CFG.ENV = EasyDict()
@@ -33,30 +34,36 @@ CFG.ENV.CUDNN.ENABLED = True
 # ================= model ================= #
 CFG.MODEL = EasyDict()
 CFG.MODEL.NAME = "STID"
-CFG.MODEL.ARCH = STID
+CFG.MODEL.ARCH = STID_S
+
 CFG.MODEL.PARAM = {
-    "num_nodes": 358,
-    "input_len": 12,
-    "input_dim": 3,
+    "input_len": 5,
+    "input_dim": 52, # feature dim: 开盘 收盘 最高 最低 成交量 换手率 DOW DOM DOQ DOY 42板块列 具体用哪些列在simple_spp_runner.py定义
     "embed_dim": 32,
-    "output_len": 12,
+    "output_len": 1, 
     "num_layer": 3,
     "if_node": True,
+    "num_nodes": 1,
     "node_dim": 32,
-    "if_T_i_D": True,
     "if_D_i_W": True,
-    "temp_dim_tid": 32,
     "temp_dim_diw": 32,
-    "time_of_day_size": 288,
-    "day_of_week_size": 7
+    "day_of_week_size": 7, # TODO
+    "if_D_i_M": True,
+    "temp_dim_dim": 32,
+    "day_of_month_size": 31, # 1-31
+    "if_D_i_Q": True,
+    "temp_dim_diq": 32,
+    "day_of_quarter_size": 92, # 1-92
+    "if_D_i_Y": True,
+    "temp_dim_diy": 32,
+    "day_of_year_size": 365, # 2-366
 }
-CFG.MODEL.FORWARD_FEATURES = [0, 1, 2]  # traffic flow, time in day
-CFG.MODEL.TARGET_FEATURES = [0] # traffic flow
+#CFG.MODEL.FORWARD_FEATURES = [0, 1, 2]  # traffic flow, time in day
+#CFG.MODEL.TARGET_FEATURES = [0] # traffic flow
 
 # ================= optim ================= #
 CFG.TRAIN = EasyDict()
-# TODO:看看Loss修改后哪里要改
-CFG.TRAIN.LOSS = masked_binary_cross_entropy
+CFG.TRAIN.LOSS = masked_bce
 CFG.TRAIN.OPTIM = EasyDict()
 CFG.TRAIN.OPTIM.TYPE = "Adam"
 CFG.TRAIN.OPTIM.PARAM = {

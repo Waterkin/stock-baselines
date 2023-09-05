@@ -8,38 +8,7 @@ class SimpleStockPricePredictionRunner(BaseStockPricePredictionRunner):
 
     def __init__(self, cfg: dict):
         super().__init__(cfg)
-        self.forward_features = cfg["MODEL"].get("FORWARD_FEATURES", None)
-        self.target_features = cfg["MODEL"].get("TARGET_FEATURES", None)
-
-    def select_input_features(self, data: torch.Tensor) -> torch.Tensor:
-        """Select input features.
-
-        Args:
-            data (torch.Tensor): input history data, shape [B, L, N, C]
-
-        Returns:
-            torch.Tensor: reshaped data
-        """
-
-        # select feature using self.forward_features
-        if self.forward_features is not None:
-            data = data[:, :, :, self.forward_features]
-        return data
-
-    def select_target_features(self, data: torch.Tensor) -> torch.Tensor:
-        """Select target feature.
-
-        Args:
-            data (torch.Tensor): prediction of the model with arbitrary shape.
-
-        Returns:
-            torch.Tensor: reshaped data with shape [B, L, N, C]
-        """
-
-        # select feature using self.target_features
-        data = data[:, :, :, self.target_features]
-        return data
-
+        
     def forward(self, data: tuple, epoch: int = None, iter_num: int = None, train: bool = True, **kwargs) -> tuple:
         """Feed forward process for train, val, and test. Note that the outputs are NOT re-scaled.
 
@@ -54,28 +23,18 @@ class SimpleStockPricePredictionRunner(BaseStockPricePredictionRunner):
         """
 
         # preprocess
-        future_data, history_data = data
-        history_data = self.to_running_device(history_data)      # B, L, N, C
-        future_data = self.to_running_device(future_data)       # B, L, N, C
-        batch_size, length, num_nodes, _ = future_data.shape
-
-        history_data = self.select_input_features(history_data)
-        if train:
-            future_data_4_dec = self.select_input_features(future_data)
-        else:
-            future_data_4_dec = self.select_input_features(future_data)
-            # only use the temporal features 
-            future_data_4_dec[..., 0] = torch.empty_like(future_data_4_dec[..., 0])
+        label, history_data = data
+        history_data = self.to_running_device(history_data)      # B, L, 1, C
+        label = self.to_running_device(label)       # B, 1, 1, 1
+        batch_size, length, features = history_data.shape
+        history_data = history_data.reshape(batch_size, length, 1, features)
+        label = label.reshape(batch_size, 1, 1, 1) # keep same shape with pred
 
         # curriculum learning
-        # TODO: 这里是数据前向传播的过程，需要看看model函数是怎么写的，怎么读的数据。
-        prediction_data = self.model(history_data=history_data, future_data=future_data_4_dec, batch_seen=iter_num, epoch=epoch, train=train)
+        prediction = self.model(history_data=history_data, future_data=label, batch_seen=iter_num, epoch=epoch, train=train)
         # feed forward
-        assert list(prediction_data.shape)[:3] == [batch_size, length, num_nodes], \
-            "error shape of the output, edit the forward function to reshape it to [B, L, N, C]"
-        # post process
-        prediction = self.select_target_features(prediction_data)
-        real_value = self.select_target_features(future_data)
-        return prediction, real_value
+        assert list(prediction.shape) == [batch_size, 1, 1, 1], \
+            f"error shape of the output {prediction.shape}, edit the forward function to reshape it to [B, 1, 1, 1]"
+        return prediction, label
     
     

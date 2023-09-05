@@ -119,7 +119,7 @@ def masked_mape(preds: torch.Tensor, labels: torch.Tensor, null_val: float = 0.0
     return torch.mean(loss)
 
 
-def masked_binary_cross_entropy(preds: torch.Tensor, labels: torch.Tensor, null_val: float = np.nan) -> torch.Tensor:
+def masked_bce(preds: torch.Tensor, labels: torch.Tensor, null_val: float = np.nan) -> torch.Tensor:
     """Masked Binary Cross Entropy Loss.
 
     Args:

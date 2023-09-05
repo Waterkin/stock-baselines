@@ -31,17 +31,19 @@ class BaseStockPricePredictionRunner(BaseRunner):
         # different datasets have different null_values, e.g., 0.0 or np.nan.
         self.null_val = cfg.get("NULL_VAL", np.nan)    # consist with metric functions
         self.dataset_type = cfg.get("DATASET_TYPE", " ")
-        self.if_rescale = cfg.get("RESCALE", True)   # if rescale data when calculating loss or metrics, default as True
+        self.if_rescale = cfg.get("RESCALE", False)   # if rescale data when calculating loss or metrics, default as True
 
         # setup graph
         self.need_setup_graph = cfg["MODEL"].get("SETUP_GRAPH", False)
 
         # read scaler for re-normalization
-        self.scaler = load_pkl("{0}/scaler_in{1}_out{2}.pkl".format(cfg["TRAIN"]["DATA"]["DIR"], cfg["DATASET_INPUT_LEN"], cfg["DATASET_OUTPUT_LEN"]))
+        #self.scaler = load_pkl("{0}/scaler_in{1}_out{2}.pkl".format(cfg["TRAIN"]["DATA"]["DIR"], cfg["DATASET_INPUT_LEN"], cfg["DATASET_OUTPUT_LEN"]))
         # define loss
         self.loss = cfg["TRAIN"]["LOSS"]
         # define metric
-        self.metrics = cfg.get("METRICS", {"ACC": acc, "MCC": mcc, "F1": f1})
+        self.metrics = cfg.get("METRICS", {"ACC": acc(), "MCC": mcc(), "F1": f1()})
+        for metrics in self.metrics.values():
+            self.to_running_device(metrics)
         # curriculum learning for output. Note that this is different from the CL in Seq2Seq archs.
         self.cl_param = cfg["TRAIN"].get("CL", None)
         if self.cl_param is not None:
@@ -51,9 +53,10 @@ class BaseStockPricePredictionRunner(BaseRunner):
             self.cl_step_size = cfg["TRAIN"].CL.get("STEP_SIZE", 1)
         # evaluation
         self.if_evaluate_on_gpu = cfg.get("EVAL", EasyDict()).get("USE_GPU", True)     # evaluate on gpu or cpu (gpu is faster but may cause OOM)
-        self.evaluation_horizons = [_ - 1 for _ in cfg.get("EVAL", EasyDict()).get("HORIZONS", range(1, 13))]
-        assert min(self.evaluation_horizons) >= 0, "The horizon should start counting from 1."
+        #self.evaluation_horizons = [_ - 1 for _ in cfg.get("EVAL", EasyDict()).get("HORIZONS", range(1, 13))]
+        #assert min(self.evaluation_horizons) >= 0, "The horizon should start counting from 1."
 
+    #region init train/val/test nothing to change
     def setup_graph(self, cfg: dict, train: bool):
         """Setup all parameters and the computation graph.
         Implementation of many works (e.g., DCRNN, GTS) acts like TensorFlow, which creates parameters in the first feedforward process.
@@ -112,7 +115,9 @@ class BaseStockPricePredictionRunner(BaseRunner):
         super().init_test(cfg)
         for key, _ in self.metrics.items():
             self.register_epoch_meter("test_"+key, "test", "{:.4f}")
-
+    #endregion
+    
+    #region 数据读取和预处理 done
     def build_train_dataset(self, cfg: dict):
         """Build MNIST train dataset
 
@@ -192,7 +197,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
         print("test len: {0}".format(len(dataset)))
 
         return dataset
-
+    #endregion
     def curriculum_learning(self, epoch: int = None) -> int:
         """Calculate task level in curriculum learning.
 
@@ -215,6 +220,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
             cl_length = min(_, self.prediction_length)
         return cl_length
 
+    # refer to simple_spp_runner.py
     def forward(self, data: tuple, epoch: int = None, iter_num: int = None, train: bool = True, **kwargs) -> tuple:
         """Feed forward process for train, val, and test. Note that the outputs are NOT re-scaled.
 
@@ -230,6 +236,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
 
         raise NotImplementedError()
 
+    #region TODO: 分类指标不能累加求平均、Rescale的问题
     def metric_forward(self, metric_func, args):
         """Computing metrics.
 
@@ -243,7 +250,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
             metric_item = metric_func(*args)
         elif callable(metric_func):
             # is a function
-            metric_item = metric_func(*args, null_val=self.null_val)
+            metric_item = metric_func(*args)#, null_val=self.null_val) 股票趋势预测不处理null指标
         else:
             raise TypeError("Unknown metric type: {0}".format(type(metric_func)))
         return metric_item
@@ -274,13 +281,13 @@ class BaseStockPricePredictionRunner(BaseRunner):
 
         iter_num = (epoch-1) * self.iter_per_epoch + iter_index
         forward_return = list(self.forward(data=data, epoch=epoch, iter_num=iter_num, train=True))
-        # re-scale data
+        # re-scale data 反归一化 为什么要这样子？
         prediction = self.rescale_data(forward_return[0]) if self.if_rescale else forward_return[0]
         real_value = self.rescale_data(forward_return[1]) if self.if_rescale else forward_return[1]
         # loss
         if self.cl_param:
             cl_length = self.curriculum_learning(epoch=epoch)
-            forward_return[0] = prediction[:, :cl_length, :, :]
+            forward_return[0] = prediction[:, :cl_length, :, :] # 只取前几个时间窗口？ 奇奇怪怪。
             forward_return[1] = real_value[:, :cl_length, :, :]
         else:
             forward_return[0] = prediction
@@ -305,7 +312,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
         prediction = self.rescale_data(forward_return[0]) if self.if_rescale else forward_return[0]
         real_value = self.rescale_data(forward_return[1]) if self.if_rescale else forward_return[1]
         # metrics
-        for metric_name, metric_func in self.metrics.items():
+        for metric_name, metric_func in self.metrics.items(): # acc,mcc,f1
             metric_item = self.metric_forward(metric_func, [prediction, real_value])
             self.update_epoch_meter("val_"+metric_name, metric_item.item())
 
@@ -321,6 +328,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
             prediction = prediction.detach().cpu()
             real_value = real_value.detach().cpu()
         # test performance of different horizon
+        '''no need because of label only on last day
         for i in self.evaluation_horizons:
             # For horizon i, only calculate the metrics **at that time** slice here.
             pred = prediction[:, i, :, :]
@@ -333,6 +341,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
             log = "Evaluate best model on test data for horizon {:d}" + metric_repr
             log = log.format(i+1)
             self.logger.info(log)
+        '''
         # test performance overall
         for metric_name, metric_func in self.metrics.items():
             metric_item = self.metric_forward(metric_func, [prediction, real_value])
@@ -362,6 +371,7 @@ class BaseStockPricePredictionRunner(BaseRunner):
         # evaluate
         self.evaluate(prediction, real_value)
 
+    #endregion
     @master_only
     def on_validating_end(self, train_epoch: Optional[int]):
         """Callback at the end of validating.
@@ -371,4 +381,5 @@ class BaseStockPricePredictionRunner(BaseRunner):
         """
 
         if train_epoch is not None:
-            self.save_best_model(train_epoch, "val_MAE", greater_best=False)
+            self.save_best_model(train_epoch, "val_MCC", greater_best=True)
+        #    self.save_best_model(train_epoch, "val_MAE", greater_best=False)

@@ -1,4 +1,4 @@
-from .arch_zoo.stid_arch import STID
+from .arch_zoo.stid_arch import STID, STID_S
 from .arch_zoo.gwnet_arch import GraphWaveNet
 from .arch_zoo.dcrnn_arch import DCRNN
 from .arch_zoo.d2stgnn_arch import D2STGNN
@@ -21,7 +21,8 @@ from .arch_zoo.triformer_arch import Triformer
 from .arch_zoo.patchtst_arch import PatchTST
 from .arch_zoo.wavenet_atch import WaveNet
 
-__all__ = ["STID", "GraphWaveNet", "DCRNN",
+
+__all__ = ["STID", "STID_S","GraphWaveNet", "DCRNN",
            "D2STGNN", "STGCN", "MTGNN",
            "STNorm", "AGCRN", "StemGNN",
            "GTS", "DGCRN", "Linear",

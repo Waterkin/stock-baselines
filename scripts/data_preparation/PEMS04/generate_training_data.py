@@ -79,6 +79,8 @@ def generate_data(args: argparse.Namespace):
         feature_list.append(dow_tiled)
 
     processed_data = np.concatenate(feature_list, axis=-1)
+    print(processed_data.shape, dow_tiled.shape, tod_tiled.shape)
+    return
 
     # save data
     index = {}
