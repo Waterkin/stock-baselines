@@ -7,6 +7,9 @@ todo.md
 gpu_task.py
 cmd.sh
 
+basicts/archs/stid_arch
+examples/T-SIDE
+
 # file
 *.npz
 *.npy
